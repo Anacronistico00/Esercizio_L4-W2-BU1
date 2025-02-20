@@ -1,0 +1,92 @@
+﻿@using BIGLIETTIIIH.Models
+@model BigliettoAddModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Acquista biglietti</h2>
+
+<div>
+    <form asp-controller="Biglietti" asp-action="Acquista" method="post">
+        <div class="form-group">
+            <label asp-for="Nome">Nome</label>
+            <input asp-for="Nome" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Cognome">Cognome</label>
+            <input asp-for="Cognome" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Sala.Id">Sala</label>
+            <select asp-for="Sala.Id" class="form-control">
+                <option value="">Seleziona una sala</option>
+                @foreach (var sala in ViewBag.Sale)
+                {
+                    <option value="@sala.Id">@sala.Nome</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="IsRidotto">Tipo di biglietto</label>
+            <select asp-for="IsRidotto" class="form-control">
+                <option value="">Seleziona Il tipo di biglietto</option>
+                <option value=false>Intero</option>
+                <option value=true>Ridotto</option>              
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Acquista</button>
+    </form>
+</div>
+
+<h3>Biglietti Rimanenti</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Totali</th>
+            <th>Interi</th>
+            <th>Ridotti</th>
+            <th>Sala</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var biglietto in ViewBag.Sale)
+        {
+            <tr>
+                <td>@biglietto.PostiTotali</td>
+                <td>@biglietto.BigliettiVenduti</td>
+                <td>@biglietto.BigliettiRidotti</td>
+                <td>@biglietto.Nome</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Biglietti Acquistati</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Sala</th>
+            <th>Ridotto</th>
+            <th>Id</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var biglietto in ViewBag.Biglietti)
+        {
+            <tr>
+                <td>@biglietto.Nome</td>
+                <td>@biglietto.Cognome</td>
+                <td>@biglietto.Sala.Nome</td>
+                <td>@(biglietto.isRidotto ? "Si" : "No")</td>
+                <td>@biglietto.Id</td>
+                <td>
+                    <a class="btn btn-danger" asp-controller="Biglietti" asp-action="Elimina" asp-route-id="@biglietto.Id">Elimina</a>
+                    <a class="btn btn-warning" asp-controller="Biglietti" asp-action="Modifica" asp-route-id="@biglietto.Id">Modifica</a>
+            </tr>
+        }
+    </tbody>
+</table>
