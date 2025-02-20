@@ -14,10 +14,9 @@ namespace BIGLIETTIIIH.Controllers
         };
         public IActionResult Index()
         {
-            var biglietto = new BigliettoAddModel();
             ViewBag.Sale = sale;
             ViewBag.Biglietti = biglietti;
-            return View(biglietto);
+            return View();
         }
 
         [HttpPost]
@@ -108,6 +107,16 @@ namespace BIGLIETTIIIH.Controllers
                 return RedirectToAction("Index");
             }
             var succesfullyRemoved = biglietti.Remove(biglietto);
+
+            biglietto.Sala.PostiTotali++;
+            if(biglietto.isRidotto)
+            {
+                biglietto.Sala.BigliettiRidotti--;
+            }
+            else
+            {
+                biglietto.Sala.BigliettiVenduti--;
+            }
 
             if (!succesfullyRemoved)
             {
